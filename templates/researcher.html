@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Researcher Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('home') }}" class="back-link">&larr; Back to Home</a>
+        
+        <h1>Researcher Dashboard</h1>
+        <p>Review the accuracy metrics and feature matrices for the Machine Learning model.</p>
+
+        <div class="image-grid">
+            {% for img in images %}
+            <div class="image-card">
+                <h3>{{ img.title }}</h3>
+                <img src="{{ url_for('static', filename='images/' + img.file) }}" alt="{{ img.title }}">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

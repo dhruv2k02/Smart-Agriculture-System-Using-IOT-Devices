@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('home') }}" class="back-link">&larr; Back to Home</a>
+        
+        <h1>Farmer Dashboard</h1>
+        <p>Enter your field parameters to calculate the required pump runtime.</p>
+
+        <div class="dashboard-layout">
+            <div class="form-card">
+                <form method="POST">
+                    <h3>Environmental Data</h3>
+                    <div class="form-group">
+                        <label>Temperature (°C)</label>
+                        <input type="number" step="0.1" name="temperature" value="30.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Humidity (%)</label>
+                        <input type="number" step="0.1" name="humidity" value="60.0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Crop Type</label>
+                        <input type="text" name="crop" value="rice" required>
+                    </div>
+
+                    <h3>Field & Pump Settings</h3>
+                    <div class="form-group">
+                        <label>Field Length (cm)</label>
+                        <input type="number" step="0.1" name="length" value="40.0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Field Width (cm)</label>
+                        <input type="number" step="0.1" name="width" value="40.0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pump Flow Rate (mL/sec)</label>
+                        <input type="number" step="0.1" name="flow_rate" value="50.0" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Calculate Pump Time</button>
+                </form>
+            </div>
+
+            {% if result %}
+            <div class="result-card">
+                <h2>Calculation Results</h2>
+                
+                <div class="result-item">
+                    <span>Predicted Rainfall:</span>
+                    <strong>{{ result.rainfall }} mm</strong>
+                </div>
+                
+                <div class="result-item">
+                    <span>Field Area:</span>
+                    <strong>{{ result.area }} m²</strong>
+                </div>
+                
+                <div class="result-item">
+                    <span>Water Volume Needed:</span>
+                    <strong>{{ result.volume_ml }} mL ({{ result.volume_l }} L)</strong>
+                </div>
+
+                <div class="action-item">
+                    <h3>Action Required:</h3>
+                    <p>Run the motor for exactly:</p>
+                    <div class="time-highlight">{{ result.run_time }} seconds</div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
