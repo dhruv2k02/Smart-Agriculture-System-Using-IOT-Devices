@@ -1,6 +1,6 @@
-# 🌾 Smart Agriculture System — IoT, Edge ML & Azure DevOps Cloud
+# 🌾 Smart Agriculture System — IoT & Edge ML
 
-An end-to-end automated precision irrigation solution powered by **IoT Edge Intelligence (Arduino + NodeMCU ESP8266)**, **Embedded Machine Learning**, and **Azure Cloud Infrastructure with Azure DevOps CI/CD Pipelines**.
+An end-to-end automated precision irrigation solution powered by **IoT Edge Intelligence (Arduino + NodeMCU ESP8266)** and **Embedded Machine Learning**.
 
 ---
 
@@ -57,27 +57,17 @@ The **Smart Agriculture System** uses field-deployed IoT sensors to monitor real
 │ • LCD (16x2)      │  SoilMoisture      │ • ML Model (C++ Edge)│
 │ • Soil Sensors    │                    │ • Pump Relay Control  │
 │ • Password Auth   │                    │ • Mist Relay Control  │
-│ • UI Flow         │                    │ • WiFi → Blynk Cloud  │
+│ • UI Flow         │                    │ • WiFi → Dashboard    │
 └───────────────────┘                    └───────────────────────┘
                                                    │
                                                    ▼
                                          ┌───────────────────┐
-                                         │   Blynk IoT Cloud │
+                                         │   Blynk IoT       │
                                          │   (Dashboard)     │
                                          │ • Live Temp/Hum   │
                                          │ • Soil Moisture   │
                                          │ • Pump Status     │
                                          │ • Mist Status     │
-                                         └───────────────────┘
-                                                   │
-                                                   ▼
-                                         ┌───────────────────┐
-                                         │  Azure Cloud      │
-                                         │  Infrastructure   │
-                                         │  (DevOps Layer)   │
-                                         │ • RG, VM, VNet    │
-                                         │ • CI/CD Pipeline  │
-                                         │ • Model Hosting   │
                                          └───────────────────┘
 ```
 
@@ -95,65 +85,11 @@ The **Smart Agriculture System** uses field-deployed IoT sensors to monitor real
    - Pump run time ($seconds$) = $Volume / FlowRate$.
    - If soil moisture is already sufficient (raw value $\le 400$), the pump remains **OFF**.
 6. **Thermal Crop Protection**: If ambient temperature exceeds $30^\circ\text{C}$, independent mistifiers trigger automatically.
-7. **Cloud IoT Dashboard**: Real-time environmental readings, soil status, mistifier state, and pump timers sync live with the **Blynk IoT Mobile Dashboard**.
+7. **IoT Dashboard**: Real-time environmental readings, soil status, mistifier state, and pump timers sync live with the **Blynk IoT Mobile Dashboard**.
 
 ---
 
-## ☁️ Azure Cloud Infrastructure & DevOps Pipeline
 
-The cloud deployment utilizes an enterprise-grade **Azure Cloud Infrastructure** paired with an **Azure DevOps CI/CD Pipeline** for automated model retraining, verification, and seamless service deployment.
-
-```text
-               AZURE DEVOPS CI/CD PIPELINE
- ┌─────────────────────────────────────────────────────┐
- │  GIT COMMIT / PUSH TO MAIN                          │
- └─────────────────────────┬───────────────────────────┘
-                           │
-                           ▼
- ┌─────────────────────────────────────────────────────┐
- │  STAGE 1: BUILD & TRAIN PIPELINE                    │
- │  • Install Python Dependencies                       │
- │  • Retrain Random Forest Model (train_edge_model.py)│
- │  • Validate Model Accuracy & Performance Metrics    │
- │  • Export C++ Header (crop_model.h) & Artifacts (.pkl)│
- └─────────────────────────┬───────────────────────────┘
-                           │ (Build Success Gate)
-                           ▼
- ┌─────────────────────────────────────────────────────┐
- │  STAGE 2: DEPLOY PIPELINE                           │
- │  • Secure SSH connection to Azure Ubuntu VM        │
- │  • Deploy updated Model & Flask API                │
- │  • Restart Flask Prediction Service                │
- │  • Execute API Health Check Endpoint               │
- └─────────────────────────────────────────────────────┘
-```
-
-### Key Cloud Components
-
-#### 1. Azure Resource Group
-- Logical container managing all production cloud assets for unified environment lifecycle, tracking, and cost governance.
-
-#### 2. Virtual Network (VNet) & Subnet Isolation
-- Isolated Virtual Network split into 3 segmented subnets following the principle of least privilege:
-  - **App Subnet**: Hosts the prediction Flask API service.
-  - **ML Subnet**: Dedicated for model training, execution, and evaluation tasks.
-  - **Database Subnet**: Dedicated storage layer.
-
-#### 3. Azure Virtual Machine (Burstable Instance)
-- Ubuntu 22.04 LTS compute node with burstable CPU capability.
-- Accumulates compute credits during idle periods and bursts during model retraining, minimizing cloud operational costs.
-
-#### 4. Network Security Group (NSG) Firewall Rules
-- **Port 22 (SSH)**: Strictly restricted to administrator public IP addresses.
-- **Port 5000 (Flask API)**: Restrictive internal VNet traffic routing.
-- **Port 443 (HTTPS)**: Secure external TLS API endpoint access.
-- Enforces Zero-Trust security rules with implicit deny-all defaults.
-
-#### 5. Automated CI/CD Pipeline (Azure DevOps)
-- **Build Stage**: Automatically retrains the model, calculates performance metrics ($R^2$, $MAE$, $MSE$), compiles C++ headers for microcontrollers, and bundles build artifacts.
-- **Deploy Stage**: Automated deployment to Azure VM via SSH, service restart, and API health checks.
-
----
 
 ## 🤖 Machine Learning & Trade-off Analysis
 
@@ -245,6 +181,6 @@ python3 src/generate_plots.py
 ---
 
 ## 📜 License & Acknowledgments
-Developed as an advanced academic project integrating IoT Hardware, Machine Learning, and Azure DevOps Infrastructure.
+Developed as an advanced academic project integrating IoT Hardware and Machine Learning.
 
 
